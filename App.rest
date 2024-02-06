@@ -1,8 +1,108 @@
+###################################--STUDENT--#################################
 ###
 
-GET http://localhost:3000/
-
+GET http://localhost:3000/student?name=Oran
 
 ###
 
-GET http://localhost:3000/home
+GET http://localhost:3000/student/4asdaqweqwe
+
+###
+
+GET http://localhost:3000/student
+###
+
+POST http://localhost:3000/student
+Content-Type: application/json
+
+{
+    "name": "Oran",
+    "age": 28,
+    "_id":"abc123"
+}
+###
+
+PUT http://localhost:3000/student/abc123
+Content-Type: application/json
+
+{
+  "name": "Oran Bourak",
+  "age": 11,
+  "_id":"abc123"
+}
+
+###
+
+DELETE http://localhost:3000/student/12321e
+
+###
+
+###################################--POST--#################################
+###
+
+GET http://localhost:3000/post
+
+###
+
+GET http://localhost:3000/post/abc123
+
+###
+
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+    "title": "Understanding Mongoose References2",
+    "message": "This post explores how to use Mongoose for creating references between different schemas",
+    "owner":"abc123"
+}
+###
+
+PUT http://localhost:3000/post/65c209170f7d0bf5da5d094f
+Content-Type: application/json
+
+{
+    "title": "Understanding Mongoose References update",
+    "message": "This post explores how to use Mongoose for creating references between different schemas",
+    "owner":"abc123"
+}
+
+###
+
+DELETE http://localhost:3000/post/65c20b140f7d0bf5da5d0954
+###
+
+
+###################################--ITEM--#################################
+###
+
+GET http://localhost:3000/item
+
+###
+
+GET http://localhost:3000/item/abc123
+
+###
+
+POST http://localhost:3000/item
+Content-Type: application/json
+
+{
+    "name": "Homework 1",
+    "owner":"abc123"
+}
+###
+
+PUT http://localhost:3000/item/65c21dfbbf0a7cb97cd11d8f
+Content-Type: application/json
+
+{
+    "name": "Homwork 2",
+    "owner":"abc123"
+}
+
+###
+
+DELETE http://localhost:3000/item/65c21eaebf0a7cb97cd11d97
+###
+

@@ -4,20 +4,13 @@ const StudentController = require("../controllers/student_controller.js")
 
 router.get("/", StudentController.getStudents)
 
+router.get("/:id", StudentController.getStudentById)
 
+router.post("/", StudentController.postStudents)
 
-router.post("/", (req, res) => {
-    res.send("student post");
-})
+router.put("/:id",StudentController.putStudents)
 
-
-router.put("/", (req, res) => {
-    res.send("student put");
-})
-
-router.delete("/", (req, res) => {
-    res.send("student delete");
-})
+router.delete("/:id",StudentController.deleteStudents)
 
 
 module.exports = router;
