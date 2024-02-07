@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node App.js",
     "dev": "nodemon App.js",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit --coverage"
   },
   "author": "Oran Bourak",
   "license": "ISC",

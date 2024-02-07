@@ -93,7 +93,7 @@ Content-Type: application/json
 }
 ###
 
-PUT http://localhost:3000/item/65c21dfbbf0a7cb97cd11d8f
+PUT http://localhost:3000/post/65c21dfbbf0a7cb97cd11d8f
 Content-Type: application/json
 
 {

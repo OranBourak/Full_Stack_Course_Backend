@@ -26,7 +26,11 @@ const getStudentById = async (req, res) => {
   try {
     // Find a student by the ID provided in the URL parameters
     const student = await Student.findById(req.params.id);
-    res.status(200).send(student);
+    if(!student) {
+      return res.status(404).send("Student not found");
+    }else{
+      return res.status(200).send(student);
+    }
   } catch (error) {
     console.log(error);
     res.status(400).send(error.message);

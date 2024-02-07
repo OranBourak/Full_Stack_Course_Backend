@@ -19,7 +19,6 @@ app.use("/student", studentRoute);
 app.use("/post", postRoute);
 app.use("/item", itemRoute)
   
-  
 
 app.listen(process.env.PORT, () => {
     console.log(`Example app listening at http://localhost:${process.env.PORT}`);
