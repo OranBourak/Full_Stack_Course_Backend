@@ -14,13 +14,13 @@ const testUser = {
 }
 
 beforeAll(async ()=>{
-    app = await appInit();
-    console.log("beforeAll");
-    await Student.deleteMany();
-    await User.deleteMany({email: testUser.email});
-    const res = await request(app).post("/auth/register").send(testUser);
-    const res2 = await request(app).post("/auth/login").send(testUser);
-    testUser.accessToken = res2.body.accessToken;
+  app = await appInit();
+  console.log("beforeAll");
+  await Student.deleteMany();
+  await User.deleteMany({ email: testUser.email });
+  await request(app).post("/auth/register").send(testUser);
+  const res = await request(app).post("/auth/login").send(testUser);
+  testUser.accessToken = res.body.accessToken;
 })
 
 
@@ -57,6 +57,8 @@ describe("Student test",()=>{
     expect(res.statusCode).toEqual(201);
     expect(res.body.name).toEqual(students[0].name);
     // studentId = res.body._id; // Save the ID for later tests
+
+    // retrieve the student from the database and compare the data to the original
     const res2 = await request(app).get("/student").set('Authorization', 'Bearer ' + testUser.accessToken);
     expect(res2.statusCode).toBe(200);
     const data = res2.body;
