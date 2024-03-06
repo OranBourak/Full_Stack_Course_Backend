@@ -6,10 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const post_controller_1 = __importDefault(require("../controllers/post_controller"));
-router.get("/", post_controller_1.default.getPost);
-router.get("/:id", post_controller_1.default.getPostById);
-router.post("/", post_controller_1.default.postPost);
-router.put("/:id", post_controller_1.default.putPost);
-router.delete("/:id", post_controller_1.default.deletePost);
+const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
+router.get("/", post_controller_1.default.get.bind(post_controller_1.default));
+router.get("/:id", post_controller_1.default.getById.bind(post_controller_1.default));
+router.post("/", auth_middleware_1.default, post_controller_1.default.post.bind(post_controller_1.default));
+router.put("/:id", post_controller_1.default.put.bind(post_controller_1.default));
+router.delete("/:id", post_controller_1.default.remove.bind(post_controller_1.default));
 exports.default = router;
 //# sourceMappingURL=post_route.js.map

@@ -11,6 +11,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const student_route_1 = __importDefault(require("./routes/student_route"));
 const post_route_1 = __importDefault(require("./routes/post_route"));
 const item_route_1 = __importDefault(require("./routes/item_route"));
+const auth_route_1 = __importDefault(require("./routes/auth_route"));
 const body_parser_1 = __importDefault(require("body-parser"));
 mongoose_1.default.connect(process.env.DATABASE_URL);
 const db = mongoose_1.default.connection;
@@ -21,6 +22,7 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use("/student", student_route_1.default);
 app.use("/post", post_route_1.default);
 app.use("/item", item_route_1.default);
+app.use("/auth", auth_route_1.default);
 app.listen(process.env.PORT, () => {
     console.log(`Example app listening at http://localhost:${process.env.PORT}`);
 });
