@@ -80,6 +80,14 @@ describe("Student test",()=>{
     expect(res.statusCode).toBe(404);
   });
 
+  test("PUT /student/:id", async () => {
+    const res = await request(app).put("/student/" + students[0]._id).send({ name: "Oran Bourak New name" }).set('Authorization', 'Bearer ' + testUser.accessToken);
+    expect(res.statusCode).toBe(200);
+    const res2 = await request(app).get("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);
+    expect(res2.statusCode).toBe(200);
+    expect(res2.body.name).toBe("Oran Bourak New name");
+  });
+
   //test delete student by id
   test("DELETE /student/:id", async () => {
     const res = await request(app).delete("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);

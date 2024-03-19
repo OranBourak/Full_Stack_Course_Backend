@@ -92,40 +92,36 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span></td><td class="text"><pre class="prettyprint lang-js">import express,{ Express } from "express";
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import express, { Express } from "express";
 const app = express();
 import dotenv from "dotenv";
 dotenv.config();
@@ -133,29 +129,27 @@ import mongoose from "mongoose";
 import studentRoute from "./routes/student_route";
 import postRoute from "./routes/post_route";
 import itemRoute from "./routes/item_route";
-import authRoute from "./routes/auth_route";
 import bodyParser from "body-parser";
-  
-//Using a function initApp  to correctly schedule the order of operations
-const initApp = ()=&gt;{
-    const promise = new Promise&lt;Express&gt;((resolve)=&gt;{
-        const db = mongoose.connection;
-        db.on("error", <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; <span class="cstat-no" title="statement not covered" >console.log(err))</span>;
-        db.once("open", () =&gt; console.log("Database connected"));
-        mongoose.connect(process.env.DATABASE_URL_FOR_TESTING).then(() =&gt;{
-            app.use(bodyParser.json());
-            app.use(bodyParser.urlencoded({ extended: true }));
-            app.use("/student", studentRoute);
-            app.use("/post", postRoute);
-            app.use("/item", itemRoute);
-            app.use("/auth", authRoute);
-            resolve(app);
-        })
-    });
+import authRoute from "./routes/auth_route";
 &nbsp;
-   return promise; 
+const initApp = () =&gt; {
+  const promise = new Promise&lt;Express&gt;((resolve) =&gt; {
+    const db = mongoose.connection;
+    db.on("error", <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; <span class="cstat-no" title="statement not covered" >console.log(err))</span>;
+    db.once("open", () =&gt; console.log("Database connected"));
+    mongoose.connect(process.env.DATABASE_URL).then(() =&gt; {
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded({ extended: true }));
+      app.use("/student", studentRoute);
+      app.use("/post", postRoute);
+      app.use("/item", itemRoute);
+      app.use("/auth", authRoute);
+      resolve(app);
+    })
+  });
+  return promise;
 };
-  
+&nbsp;
 export default initApp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +157,7 @@ export default initApp;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-06T10:19:53.185Z
+                at 2024-03-17T14:35:56.345Z
             </div>
         <script src="../prettify.js"></script>
         <script>

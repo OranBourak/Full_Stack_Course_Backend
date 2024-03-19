@@ -3,27 +3,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const app = (0, express_1.default)();
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const mongoose_1 = __importDefault(require("mongoose"));
-const student_route_1 = __importDefault(require("./routes/student_route"));
-const post_route_1 = __importDefault(require("./routes/post_route"));
-const item_route_1 = __importDefault(require("./routes/item_route"));
-const auth_route_1 = __importDefault(require("./routes/auth_route"));
-const body_parser_1 = __importDefault(require("body-parser"));
-mongoose_1.default.connect(process.env.DATABASE_URL);
-const db = mongoose_1.default.connection;
-db.on("error", (err) => console.log(err));
-db.once("open", () => console.log("Database connected"));
-app.use(body_parser_1.default.json());
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use("/student", student_route_1.default);
-app.use("/post", post_route_1.default);
-app.use("/item", item_route_1.default);
-app.use("/auth", auth_route_1.default);
-app.listen(process.env.PORT, () => {
-    console.log(`Example app listening at http://localhost:${process.env.PORT}`);
+const Server_1 = __importDefault(require("./Server"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+(0, Server_1.default)().then((app) => {
+    if (process.env.NODE_ENV === "development") {
+        const options = {
+            definition: {
+                openapi: "3.0.0",
+                info: {
+                    title: "SCE Web Application Backend API",
+                    version: "1.0.0",
+                    description: "This is a CRUD API application made with Express and documented with Swagger",
+                },
+                servers: [
+                    {
+                        url: "http://localhost:" + process.env.PORT,
+                    },
+                ],
+            },
+            apis: ["./src/routes/*.ts"],
+        };
+        const specs = (0, swagger_jsdoc_1.default)(options);
+        app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));
+    }
+    app.listen(process.env.PORT, () => {
+        console.log(`Example app listening at http://localhost:${process.env.PORT}`);
+    });
 });
 //# sourceMappingURL=App.js.map

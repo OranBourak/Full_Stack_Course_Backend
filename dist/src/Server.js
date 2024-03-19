@@ -11,15 +11,14 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const student_route_1 = __importDefault(require("./routes/student_route"));
 const post_route_1 = __importDefault(require("./routes/post_route"));
 const item_route_1 = __importDefault(require("./routes/item_route"));
-const auth_route_1 = __importDefault(require("./routes/auth_route"));
 const body_parser_1 = __importDefault(require("body-parser"));
-//Using a function initApp  to correctly schedule the order of operations
+const auth_route_1 = __importDefault(require("./routes/auth_route"));
 const initApp = () => {
     const promise = new Promise((resolve) => {
         const db = mongoose_1.default.connection;
         db.on("error", (err) => console.log(err));
         db.once("open", () => console.log("Database connected"));
-        mongoose_1.default.connect(process.env.DATABASE_URL_FOR_TESTING).then(() => {
+        mongoose_1.default.connect(process.env.DATABASE_URL).then(() => {
             app.use(body_parser_1.default.json());
             app.use(body_parser_1.default.urlencoded({ extended: true }));
             app.use("/student", student_route_1.default);

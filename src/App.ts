@@ -1,28 +1,33 @@
-import express from "express";
-const app = express();
-import dotenv from "dotenv";
-dotenv.config();
-import  mongoose  from "mongoose";
-import  studentRoute  from "./routes/student_route";
-import  postRoute  from "./routes/post_route";
-import  itemRoute  from "./routes/item_route";
-import authRoute from "./routes/auth_route";
-import  bodyParser  from "body-parser";
-  
-mongoose.connect(process.env.DATABASE_URL);
-const db = mongoose.connection;
-db.on("error", (err) => console.log(err));
-db.once("open", () => console.log("Database connected"));
-  
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-  
-app.use("/student", studentRoute);
-app.use("/post", postRoute);
-app.use("/item", itemRoute);
-app.use("/auth", authRoute);
-  
+import appInit from "./Server";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
 
-app.listen(process.env.PORT, () => {
-    console.log(`Example app listening at http://localhost:${process.env.PORT}`);
-  });
+appInit().then((app) => {
+  if (process.env.NODE_ENV === "development") {
+    const options = {
+      definition: {
+        openapi: "3.0.0",
+        info: {
+          title: "SCE Web Application Backend API",
+          version: "1.0.0",
+          description:
+            "This is a CRUD API application made with Express and documented with Swagger",
+        },
+        servers: [
+          {
+            url: "http://localhost:" + process.env.PORT,
+          },
+        ],
+      },
+      apis: ["./src/routes/*.ts"],
+    };
+    
+    const specs = swaggerJsDoc(options);
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+  }
+  
+  app.listen(process.env.PORT, () => {
+      console.log(`Example app listening at http://localhost:${process.env.PORT}`);
+    });
+});
+
