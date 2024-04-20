@@ -7,7 +7,8 @@ import User from "../models/user_model";
 
 const user = {
     email: "test@gmail.com",
-    password: "123456"
+    password: "123456",
+    image: "test.jpg",
 }
 
 let app: Express;

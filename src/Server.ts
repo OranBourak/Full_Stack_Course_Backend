@@ -8,6 +8,7 @@ import postRoute from "./routes/post_route";
 import itemRoute from "./routes/item_route";
 import bodyParser from "body-parser";
 import authRoute from "./routes/auth_route";
+import userRoute from "./routes/user_route";
 
 const initApp = () => {
   const promise = new Promise<Express>((resolve) => {
@@ -20,6 +21,7 @@ const initApp = () => {
       app.use("/student", studentRoute);
       app.use("/post", postRoute);
       app.use("/item", itemRoute);
+      app.use("/user", userRoute);
       app.use("/auth", authRoute);
       resolve(app);
     })

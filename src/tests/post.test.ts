@@ -10,6 +10,7 @@ let app:Express;
 const testUser = {
     email: "testPost@gmail.com",
     password: "12345678",
+    image: "testPost.jpg",
     accessToken: null
 }
 

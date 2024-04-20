@@ -7,8 +7,9 @@ const register = async (req: Request, res: Response) => {
     console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
+    const image = req.body.image;
 
-    if (email == null || password == null) {
+    if (email == null || password == null || image == null) {
         return res.status(400).send("missing email or password");
     }
 
@@ -22,7 +23,8 @@ const register = async (req: Request, res: Response) => {
 
         const newUser = await User.create({
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            image: image
         });
 
         return res.status(200).send(newUser);

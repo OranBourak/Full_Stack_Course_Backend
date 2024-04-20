@@ -11,18 +11,24 @@ class base_controller<ModelType>{
   async get(req:Request, res:Response){
     console.log("get");
     try {
-      // Check if a name query parameter is provided and filter students by name
-      if (req.query.name) {
-      const item = await this.itemModel.find({ name: req.query.name });
-      res.status(200).send(item);
-      } else {
-        // If no name query parameter, return all students
-      const item = await this.itemModel.find();
-      res.status(200).send(item);
+      // Check if a name query parameter is provided and filter objects by email
+      if (req.query.email) {
+        const item = await this.itemModel.find({ email: req.query.email });
+        res.status(200).send(item);
+      }
+      // Check if a owner query parameter is provided and filter objects by owner
+      else if (req.query.owner) {
+        const item = await this.itemModel.find({ owner: req.query.owner });
+        res.status(200).send(item);
+      }
+      else {
+        // If no name query parameter, return all objects
+        const item = await this.itemModel.find();
+        res.status(200).send(item);
       }
     } catch (error) {
-      console.log(error);
-      res.status(400).send(error.message);
+        console.log(error);
+        res.status(400).send(error.message);
     }
   }
 
@@ -47,7 +53,7 @@ class base_controller<ModelType>{
    async post(req:Request, res:Response){
     console.log("post controller");
     try {
-      // Create a new student document in the database with the provided request body
+      // Create a new object in the database with the provided request body
       const item = await this.itemModel.create(req.body);
       res.status(201).send(item); // 201 status code for resource creation
     } catch (error) {
