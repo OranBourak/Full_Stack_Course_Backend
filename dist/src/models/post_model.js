@@ -16,7 +16,7 @@ const postSchema = new mongoose_1.default.Schema({
     owner: {
         type: String, // Use ObjectId to reference another document
         required: true,
-        ref: 'Student' // Reference the Student model
+        ref: 'User' // Reference the User model
     },
 });
 exports.default = mongoose_1.default.model('Post', postSchema);

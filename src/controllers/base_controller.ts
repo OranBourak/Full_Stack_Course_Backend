@@ -7,11 +7,11 @@ class base_controller<ModelType>{
   constructor(itemModel:mongoose.Model<ModelType>){
     this.itemModel = itemModel;
   }
-  // GET all items or items by name
+  // GET all items or items by email / owner
   async get(req:Request, res:Response){
     console.log("get");
     try {
-      // Check if a name query parameter is provided and filter objects by email
+      // Check if a email query parameter is provided and filter objects by email
       if (req.query.email) {
         const item = await this.itemModel.find({ email: req.query.email });
         res.status(200).send(item);

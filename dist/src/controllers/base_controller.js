@@ -13,18 +13,23 @@ class base_controller {
     constructor(itemModel) {
         this.itemModel = itemModel;
     }
-    // GET all items or items by name
+    // GET all items or items by email / owner
     get(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("get");
             try {
-                // Check if a name query parameter is provided and filter students by name
-                if (req.query.name) {
-                    const item = yield this.itemModel.find({ name: req.query.name });
+                // Check if a email query parameter is provided and filter objects by email
+                if (req.query.email) {
+                    const item = yield this.itemModel.find({ email: req.query.email });
+                    res.status(200).send(item);
+                }
+                // Check if a owner query parameter is provided and filter objects by owner
+                else if (req.query.owner) {
+                    const item = yield this.itemModel.find({ owner: req.query.owner });
                     res.status(200).send(item);
                 }
                 else {
-                    // If no name query parameter, return all students
+                    // If no name query parameter, return all objects
                     const item = yield this.itemModel.find();
                     res.status(200).send(item);
                 }
@@ -60,7 +65,7 @@ class base_controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("post controller");
             try {
-                // Create a new student document in the database with the provided request body
+                // Create a new object in the database with the provided request body
                 const item = yield this.itemModel.create(req.body);
                 res.status(201).send(item); // 201 status code for resource creation
             }

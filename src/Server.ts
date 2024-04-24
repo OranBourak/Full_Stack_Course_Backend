@@ -9,6 +9,9 @@ import itemRoute from "./routes/item_route";
 import bodyParser from "body-parser";
 import authRoute from "./routes/auth_route";
 import userRoute from "./routes/user_route";
+import fileRoute from "./routes/file_route";
+
+
 
 const initApp = () => {
   const promise = new Promise<Express>((resolve) => {
@@ -23,6 +26,8 @@ const initApp = () => {
       app.use("/item", itemRoute);
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
+      app.use("/file", fileRoute);
+
       resolve(app);
     })
   });

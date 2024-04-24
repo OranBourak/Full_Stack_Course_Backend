@@ -21,6 +21,7 @@ let app;
 const testUser = {
     email: "testStudent@gmail.com",
     password: "1234567",
+    image: "testStudent.jpg",
     accessToken: ""
 };
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -78,6 +79,13 @@ describe("Student test", () => {
     test("Fail GET /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
         const res = yield (0, supertest_1.default)(app).get("/student/00000").set('Authorization', 'Bearer ' + testUser.accessToken);
         expect(res.statusCode).toBe(404);
+    }));
+    test("PUT /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield (0, supertest_1.default)(app).put("/student/" + students[0]._id).send({ name: "Oran Bourak New name" }).set('Authorization', 'Bearer ' + testUser.accessToken);
+        expect(res.statusCode).toBe(200);
+        const res2 = yield (0, supertest_1.default)(app).get("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);
+        expect(res2.statusCode).toBe(200);
+        expect(res2.body.name).toBe("Oran Bourak New name");
     }));
     //test delete student by id
     test("DELETE /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
