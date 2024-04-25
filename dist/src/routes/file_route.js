@@ -6,23 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
 const router = express_1.default.Router();
-const base = "http://localhost:3000/";
+const base = "http://192.168.7.32:3000/";
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '.jpg'); //Appending .jpg
+        console.log("multer storage callback");
+        const uniqueSuffix = Date.now() + '.jpg';
+        cb(null, uniqueSuffix);
     }
 });
 const upload = (0, multer_1.default)({ storage: storage });
 router.post('/file', upload.single("file"), function (req, res) {
-    console.log("router.post(/file: " + base + req.file.path);
+    console.log("router.post(/file): " + base + req.file.path);
     res.status(200).send({ url: base + req.file.path });
-});
-router.post('/', function (req, res) {
-    console.log('###### File route ######');
-    res.status(400).send("File route");
 });
 exports.default = router;
 //# sourceMappingURL=file_route.js.map

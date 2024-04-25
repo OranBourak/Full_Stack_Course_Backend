@@ -107,7 +107,8 @@ router.get("/:id",authMiddleware, UserController.getById.bind(UserController));
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.post("/",authMiddleware, UserController.post.bind(UserController));
+router.post("/", authMiddleware,UserController.post.bind(UserController));
+
 
 
 

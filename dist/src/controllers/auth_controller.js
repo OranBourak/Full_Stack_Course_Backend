@@ -15,25 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../models/user_model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
-    const image = req.body.image;
-    if (email == null || password == null || image == null) {
+    const imgUrl = req.body.imgUrl;
+    if (email == null || password == null || imgUrl == null) {
         return res.status(400).send("missing email or password");
     }
     try {
         const user = yield user_model_1.default.findOne({ email: email });
         if (user) {
-            return res.status(400).send("user already exists");
+            const filePath = path_1.default.join(__dirname, '../../../', 'uploads', path_1.default.basename(imgUrl));
+            try {
+                fs_1.default.unlinkSync(filePath); // Synchronous file deletion
+                console.log("Image was deleted because user already exists");
+            }
+            catch (err) {
+                console.error("Error deleting the image:", err);
+            }
+            return res.status(400).send("User already exists");
         }
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
         const newUser = yield user_model_1.default.create({
             email: email,
             password: hashedPassword,
-            image: image
+            imgUrl: imgUrl
         });
         return res.status(200).send(newUser);
     }
@@ -94,6 +104,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const logout = (req, res) => {
     res.status(400).send("logout");
+    //TODO: implement logout
 };
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //extract token from http header

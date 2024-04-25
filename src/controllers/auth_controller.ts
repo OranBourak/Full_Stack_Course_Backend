@@ -2,21 +2,34 @@ import { Request, Response } from "express";
 import User from "../models/user_model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fs from "fs";
+import path from "path";
+
+
 
 const register = async (req: Request, res: Response) => {
     console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
-    const image = req.body.image;
+    const imgUrl = req.body.imgUrl;
 
-    if (email == null || password == null || image == null) {
+    if (email == null || password == null || imgUrl == null) {
         return res.status(400).send("missing email or password");
     }
 
     try {
         const user = await User.findOne({ email: email });
+
         if (user) {
-            return res.status(400).send("user already exists");
+            const filePath = path.join(__dirname, '../../../', 'uploads', path.basename(imgUrl));
+            try {
+                fs.unlinkSync(filePath); // Synchronous file deletion
+                console.log("Image was deleted because user already exists");
+            } catch (err) {
+                console.error("Error deleting the image:", err);
+            }
+            return res.status(400).send("User already exists")
+
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -24,7 +37,7 @@ const register = async (req: Request, res: Response) => {
         const newUser = await User.create({
             email: email,
             password: hashedPassword,
-            image: image
+            imgUrl: imgUrl
         });
 
         return res.status(200).send(newUser);
@@ -95,6 +108,7 @@ const login = async (req: Request, res: Response) => {
 
 const logout = (req: Request, res: Response) => {
     res.status(400).send("logout");
+    //TODO: implement logout
 }
 
 const refresh = async (req: Request, res: Response) => {

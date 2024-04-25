@@ -30,9 +30,10 @@ describe("File Tests", () => {
         const filePath = `${__dirname}/Avatar.png`;
         const rs = yield fs_1.default.exists(filePath);
         if (rs) {
+            console.log("File exists");
             try {
                 const response = yield (0, supertest_1.default)(app)
-                    .post("/file/")
+                    .post('/file/file')
                     .attach('file', filePath); // Attach the file to the request
                 expect(response.statusCode).toBe(200);
             }

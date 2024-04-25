@@ -3,7 +3,7 @@ import multer from 'multer';
 
 const router = express.Router();
 
-const base = "http://localhost:3000/"
+const base = "http://192.168.7.32:3000/"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -22,5 +22,7 @@ router.post('/file', upload.single("file"), function (req, res) {
   console.log("router.post(/file): " + base + req.file.path)
   res.status(200).send({url: base + req.file.path}) 
 });
+
+
 
 export default router;

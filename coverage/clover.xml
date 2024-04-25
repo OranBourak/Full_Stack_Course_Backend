@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713961954542" clover="3.2.0">
-  <project timestamp="1713961954542" name="All files">
+<coverage generated="1714044424004" clover="3.2.0">
+  <project timestamp="1714044424004" name="All files">
     <metrics statements="249" coveredstatements="133" conditionals="35" coveredconditionals="0" methods="30" coveredmethods="9" elements="314" coveredelements="142" complexity="0" loc="249" ncloc="249" packages="5" files="18" classes="18"/>
     <package name="src">
       <metrics statements="29" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="4"/>
@@ -234,7 +234,7 @@
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.routes">
@@ -265,7 +265,7 @@
         <line num="21" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
       </file>
       <file name="item_route.ts" path="C:\Users\oranb\Desktop\Studies\Fourth year\Full_Stack_Course\project\Full_Stack_Course_Backend\src\routes\item_route.ts">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -315,9 +315,9 @@
         <line num="59" count="1" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
         <line num="110" count="1" type="stmt"/>
-        <line num="148" count="1" type="stmt"/>
-        <line num="175" count="1" type="stmt"/>
-        <line num="178" count="1" type="stmt"/>
+        <line num="149" count="1" type="stmt"/>
+        <line num="176" count="1" type="stmt"/>
+        <line num="179" count="1" type="stmt"/>
       </file>
     </package>
   </project>
