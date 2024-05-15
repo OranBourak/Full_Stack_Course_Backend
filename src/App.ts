@@ -21,13 +21,14 @@ appInit().then((app) => {
       },
       apis: ["./src/routes/*.ts"],
     };
-    
+
     const specs = swaggerJsDoc(options);
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
   }
-  
-  app.listen(process.env.PORT, () => {
-      console.log(`Example app listening at http://localhost:${process.env.PORT}`);
-    });
-});
 
+  app.listen(process.env.PORT, () => {
+    console.log(
+      `Example app listening at http://localhost:${process.env.PORT}`
+    );
+  });
+});

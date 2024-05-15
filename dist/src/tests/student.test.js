@@ -22,7 +22,7 @@ const testUser = {
     email: "testStudent@gmail.com",
     password: "1234567",
     image: "testStudent.jpg",
-    accessToken: ""
+    accessToken: "",
 };
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     app = yield (0, Server_1.default)();
@@ -51,18 +51,25 @@ const students = [
 ];
 describe("Student test", () => {
     test("Get /student - empty collection", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/student").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/student")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         const data = res.body;
         expect(data).toEqual([]);
     }));
     test("POST /student", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).post("/student").send(students[0]).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .post("/student")
+            .send(students[0])
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toEqual(201);
         expect(res.body.name).toEqual(students[0].name);
         // studentId = res.body._id; // Save the ID for later tests
         // retrieve the student from the database and compare the data to the original
-        const res2 = yield (0, supertest_1.default)(app).get("/student").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res2 = yield (0, supertest_1.default)(app)
+            .get("/student")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res2.statusCode).toBe(200);
         const data = res2.body;
         const { name, age, _id } = data[0];
@@ -70,28 +77,41 @@ describe("Student test", () => {
         expect(simplifiedObject).toEqual(students[0]);
     }));
     test("GET /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/student/" + students[0]._id)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         expect(res.body.name).toBe(students[0].name);
         expect(res.body._id).toBe(students[0]._id);
         expect(res.body.age).toBe(students[0].age);
     }));
     test("Fail GET /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/student/00000").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/student/00000")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(404);
     }));
     test("PUT /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).put("/student/" + students[0]._id).send({ name: "Oran Bourak New name" }).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .put("/student/" + students[0]._id)
+            .send({ name: "Oran Bourak New name" })
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
-        const res2 = yield (0, supertest_1.default)(app).get("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res2 = yield (0, supertest_1.default)(app)
+            .get("/student/" + students[0]._id)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res2.statusCode).toBe(200);
         expect(res2.body.name).toBe("Oran Bourak New name");
     }));
     //test delete student by id
     test("DELETE /student/:id", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).delete("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .delete("/student/" + students[0]._id)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
-        const res2 = yield (0, supertest_1.default)(app).get("/student/" + students[0]._id).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res2 = yield (0, supertest_1.default)(app)
+            .get("/student/" + students[0]._id)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res2.statusCode).toBe(404);
     }));
 });

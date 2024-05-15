@@ -11,8 +11,6 @@ import authRoute from "./routes/auth_route";
 import userRoute from "./routes/user_route";
 import fileRoute from "./routes/file_route";
 
-
-
 const initApp = () => {
   const promise = new Promise<Express>((resolve) => {
     const db = mongoose.connection;
@@ -27,9 +25,10 @@ const initApp = () => {
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
       app.use("/file", fileRoute);
+      app.use("/uploads", express.static("uploads"));
 
       resolve(app);
-    })
+    });
   });
   return promise;
 };

@@ -8,54 +8,54 @@ const router = express_1.default.Router();
 const student_controller_1 = __importDefault(require("../controllers/student_controller"));
 const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
 /**
-* @swagger
-* tags:
-*   name: Student
-*   description: The Student API
-*/
+ * @swagger
+ * tags:
+ *   name: Student
+ *   description: The Student API
+ */
 /**
-* @swagger
-* components:
-*   schemas:
-*     Student:
-*       type: object
-*       required:
-*         - _id
-*         - name
-*         - age
-*       properties:
-*         _id:
-*           type: string
-*           description: The user id
-*         name:
-*           type: string
-*           description: The user name
-*         age:
-*           type: number
-*           description: The user age
-*       example:
-*         _id: '12345'
-*         name: 'oran'
-*         age: 29
-*/
+ * @swagger
+ * components:
+ *   schemas:
+ *     Student:
+ *       type: object
+ *       required:
+ *         - _id
+ *         - name
+ *         - age
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The user id
+ *         name:
+ *           type: string
+ *           description: The user name
+ *         age:
+ *           type: number
+ *           description: The user age
+ *       example:
+ *         _id: '12345'
+ *         name: 'oran'
+ *         age: 29
+ */
 /**
-* @swagger
-* /student:
-*   get:
-*     summary: Get all students
-*     tags: [Student]
-*     security:
-*       - bearerAuth: []
-*     responses:
-*       200:
-*         description: list of all the students
-*         content:
-*           application/json:
-*             schema:
-*               type: array
-*               items:
-*                  $ref: '#/components/schemas/Student'
-*/
+ * @swagger
+ * /student:
+ *   get:
+ *     summary: Get all students
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: list of all the students
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Student'
+ */
 router.get("/", auth_middleware_1.default, student_controller_1.default.get.bind(student_controller_1.default));
 /**
  * @swagger

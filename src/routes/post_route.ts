@@ -36,7 +36,6 @@ import authMiddleware from "../common/auth_middleware";
  *         owner: '54321'
  */
 
-
 /**
  * @swagger
  * /post:
@@ -57,7 +56,7 @@ import authMiddleware from "../common/auth_middleware";
  *       400:
  *         description: Error occurred
  */
-router.get("/",authMiddleware, PostController.get.bind(PostController));
+router.get("/", authMiddleware, PostController.get.bind(PostController));
 
 /**
  * @swagger
@@ -86,7 +85,7 @@ router.get("/",authMiddleware, PostController.get.bind(PostController));
  *       400:
  *         description: Error occurred
  */
-router.get("/:id",authMiddleware, PostController.getById.bind(PostController));
+router.get("/:id", authMiddleware, PostController.getById.bind(PostController));
 
 /**
  * @swagger
@@ -112,7 +111,7 @@ router.get("/:id",authMiddleware, PostController.getById.bind(PostController));
  *       400:
  *         description: Error occurred
  */
-router.post("/",authMiddleware, PostController.post.bind(PostController));
+router.post("/", authMiddleware, PostController.post.bind(PostController));
 
 /**
  * @swagger
@@ -143,7 +142,7 @@ router.post("/",authMiddleware, PostController.post.bind(PostController));
  *       400:
  *         description: Error occurred
  */
-router.put("/:id",authMiddleware, PostController.put.bind(PostController));
+router.put("/:id", authMiddleware, PostController.put.bind(PostController));
 
 /**
  * @swagger
@@ -168,6 +167,10 @@ router.put("/:id",authMiddleware, PostController.put.bind(PostController));
  *       400:
  *         description: Error occurred
  */
-router.delete("/:id",authMiddleware, PostController.remove.bind(PostController));
+router.delete(
+  "/:id",
+  authMiddleware,
+  PostController.remove.bind(PostController)
+);
 
 export default router;

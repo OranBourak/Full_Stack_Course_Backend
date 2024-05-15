@@ -29,6 +29,7 @@ const initApp = () => {
             app.use("/user", user_route_1.default);
             app.use("/auth", auth_route_1.default);
             app.use("/file", file_route_1.default);
+            app.use("/uploads", express_1.default.static("uploads"));
             resolve(app);
         });
     });

@@ -17,18 +17,21 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const google_auth_library_1 = require("google-auth-library");
+const client = new google_auth_library_1.OAuth2Client("259698500105-5v2g2mnfto185u6ebm282a0afeve4en2.apps.googleusercontent.com");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+    console.log("register function received:" + req.body);
     const email = req.body.email;
     const password = req.body.password;
     const imgUrl = req.body.imgUrl;
+    const userName = req.body.name;
     if (email == null || password == null || imgUrl == null) {
         return res.status(400).send("missing email or password");
     }
     try {
         const user = yield user_model_1.default.findOne({ email: email });
         if (user) {
-            const filePath = path_1.default.join(__dirname, '../../../', 'uploads', path_1.default.basename(imgUrl));
+            const filePath = path_1.default.join(__dirname, "../../../", "uploads", path_1.default.basename(imgUrl));
             try {
                 fs_1.default.unlinkSync(filePath); // Synchronous file deletion
                 console.log("Image was deleted because user already exists");
@@ -41,9 +44,10 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
         const newUser = yield user_model_1.default.create({
+            name: userName,
             email: email,
             password: hashedPassword,
-            imgUrl: imgUrl
+            imgUrl: imgUrl,
         });
         return res.status(200).send(newUser);
     }
@@ -55,17 +59,17 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 //generate access token & refresh token for user id
 const generateTokens = (userId) => {
     const accessToken = jsonwebtoken_1.default.sign({
-        _id: userId
+        _id: userId,
     }, process.env.TOKEN_SECRET, {
-        expiresIn: process.env.TOKEN_EXPIRATION
+        expiresIn: process.env.TOKEN_EXPIRATION,
     });
     const refreshToken = jsonwebtoken_1.default.sign({
         _id: userId,
-        salt: Math.random()
+        salt: Math.random(),
     }, process.env.REFRESH_TOKEN_SECRET);
     return {
         accessToken: accessToken,
-        refreshToken: refreshToken
+        refreshToken: refreshToken,
     };
 };
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -94,12 +98,35 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield user.save();
         return res.status(200).send({
             accessToken: accessToken,
-            refreshToken: refreshToken
+            refreshToken: refreshToken,
         });
     }
     catch (error) {
         console.log(error);
         return res.status(400).send(error.message);
+    }
+});
+const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_token } = req.body;
+    try {
+        const ticket = yield client.verifyIdToken({
+            idToken: id_token,
+            audience: "259698500105-5v2g2mnfto185u6ebm282a0afeve4en2.apps.googleusercontent.com",
+        });
+        const payload = ticket.getPayload();
+        let user = yield user_model_1.default.findOne({ email: payload.email });
+        if (!user) {
+            user = yield user_model_1.default.create({
+                email: payload.email,
+                name: payload.name,
+                imgUrl: payload.picture,
+            });
+        }
+        const tokens = generateTokens(user._id.toString());
+        res.status(200).send(tokens);
+    }
+    catch (error) {
+        res.status(400).send("Error processing Google login");
     }
 });
 const logout = (req, res) => {
@@ -108,8 +135,8 @@ const logout = (req, res) => {
 };
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //extract token from http header
-    const authHeader = req.headers['authorization'];
-    const refreshTokenOrig = authHeader && authHeader.split(' ')[1];
+    const authHeader = req.headers["authorization"];
+    const refreshTokenOrig = authHeader && authHeader.split(" ")[1];
     if (refreshTokenOrig == null) {
         return res.status(401).send("missing token");
     }
@@ -120,7 +147,9 @@ const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         try {
             const user = yield user_model_1.default.findById(userInfo._id);
-            if (user == null || user.tokens == null || !user.tokens.includes(refreshTokenOrig)) {
+            if (user == null ||
+                user.tokens == null ||
+                !user.tokens.includes(refreshTokenOrig)) {
                 if (user.tokens != null) {
                     user.tokens = [];
                     yield user.save();
@@ -130,13 +159,13 @@ const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //generate new access token
             const { accessToken, refreshToken } = generateTokens(user._id.toString());
             //update refresh token in db
-            user.tokens = user.tokens.filter(token => token != refreshTokenOrig);
+            user.tokens = user.tokens.filter((token) => token != refreshTokenOrig);
             user.tokens.push(refreshToken);
             yield user.save();
             //return new access token & new refresh token
             return res.status(200).send({
                 accessToken: accessToken,
-                refreshToken: refreshToken
+                refreshToken: refreshToken,
             });
         }
         catch (error) {
@@ -149,6 +178,7 @@ exports.default = {
     register,
     login,
     logout,
-    refresh
+    refresh,
+    googleLogin,
 };
 //# sourceMappingURL=auth_controller.js.map

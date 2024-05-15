@@ -33,8 +33,8 @@ describe("File Tests", () => {
             console.log("File exists");
             try {
                 const response = yield (0, supertest_1.default)(app)
-                    .post('/file/file')
-                    .attach('file', filePath); // Attach the file to the request
+                    .post("/file/upload")
+                    .attach("file", filePath); // Attach the file to the request
                 expect(response.statusCode).toBe(200);
             }
             catch (error) {

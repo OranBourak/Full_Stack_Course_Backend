@@ -3,8 +3,6 @@ const router = express.Router();
 import ItemController from "../controllers/item_controller";
 import authMiddleware from "../common/auth_middleware";
 
-
-
 /**
  * @swagger
  * tags:
@@ -33,8 +31,6 @@ import authMiddleware from "../common/auth_middleware";
  *         owner: '12345'
  */
 
-
-
 /**
  * @swagger
  * /item:
@@ -56,7 +52,6 @@ import authMiddleware from "../common/auth_middleware";
  *         description: Error occurred
  */
 router.get("/", authMiddleware, ItemController.get.bind(ItemController));
-
 
 /**
  * @swagger
@@ -85,7 +80,7 @@ router.get("/", authMiddleware, ItemController.get.bind(ItemController));
  *       400:
  *         description: Error occurred
  */
-router.get("/:id",authMiddleware, ItemController.getById.bind(ItemController));
+router.get("/:id", authMiddleware, ItemController.getById.bind(ItemController));
 
 /**
  * @swagger
@@ -112,7 +107,6 @@ router.get("/:id",authMiddleware, ItemController.getById.bind(ItemController));
  *         description: Error occurred
  */
 router.post("/", authMiddleware, ItemController.post.bind(ItemController));
-
 
 /**
  * @swagger
@@ -145,7 +139,6 @@ router.post("/", authMiddleware, ItemController.post.bind(ItemController));
  */
 router.put("/:id", authMiddleware, ItemController.put.bind(ItemController));
 
-
 /**
  * @swagger
  * /item/{id}:
@@ -169,6 +162,10 @@ router.put("/:id", authMiddleware, ItemController.put.bind(ItemController));
  *       400:
  *         description: Error occurred
  */
-router.delete("/:id", authMiddleware, ItemController.remove.bind(ItemController));
+router.delete(
+  "/:id",
+  authMiddleware,
+  ItemController.remove.bind(ItemController)
+);
 
 export default router;

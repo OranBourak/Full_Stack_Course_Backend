@@ -1,7 +1,7 @@
 // Import the Item model
 import Item from "../models/item_model";
-import BaseController  from "./base_controller";
-import {IItem} from "../models/item_model";
+import BaseController from "./base_controller";
+import { IItem } from "../models/item_model";
 
 const itemController = new BaseController<IItem>(Item);
 

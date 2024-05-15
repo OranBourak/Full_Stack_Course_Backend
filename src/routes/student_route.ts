@@ -3,60 +3,58 @@ const router = express.Router();
 import StudentController from "../controllers/student_controller";
 import authMiddleware from "../common/auth_middleware";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Student
+ *   description: The Student API
+ */
 
 /**
-* @swagger
-* tags:
-*   name: Student
-*   description: The Student API
-*/
+ * @swagger
+ * components:
+ *   schemas:
+ *     Student:
+ *       type: object
+ *       required:
+ *         - _id
+ *         - name
+ *         - age
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The user id
+ *         name:
+ *           type: string
+ *           description: The user name
+ *         age:
+ *           type: number
+ *           description: The user age
+ *       example:
+ *         _id: '12345'
+ *         name: 'oran'
+ *         age: 29
+ */
 
 /**
-* @swagger
-* components:
-*   schemas:
-*     Student:
-*       type: object
-*       required:
-*         - _id
-*         - name
-*         - age
-*       properties:
-*         _id:
-*           type: string
-*           description: The user id
-*         name:
-*           type: string
-*           description: The user name
-*         age:
-*           type: number
-*           description: The user age
-*       example:
-*         _id: '12345'
-*         name: 'oran'
-*         age: 29
-*/
-
-
-/**
-* @swagger
-* /student:
-*   get:
-*     summary: Get all students
-*     tags: [Student]
-*     security:
-*       - bearerAuth: []
-*     responses:
-*       200:
-*         description: list of all the students
-*         content:
-*           application/json:
-*             schema:
-*               type: array
-*               items:
-*                  $ref: '#/components/schemas/Student'
-*/
-router.get("/",authMiddleware, StudentController.get.bind(StudentController));
+ * @swagger
+ * /student:
+ *   get:
+ *     summary: Get all students
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: list of all the students
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Student'
+ */
+router.get("/", authMiddleware, StudentController.get.bind(StudentController));
 
 /**
  * @swagger
@@ -82,8 +80,11 @@ router.get("/",authMiddleware, StudentController.get.bind(StudentController));
  *             schema:
  *               $ref: '#/components/schemas/Student'
  */
-router.get("/:id",authMiddleware, StudentController.getById.bind(StudentController));
-
+router.get(
+  "/:id",
+  authMiddleware,
+  StudentController.getById.bind(StudentController)
+);
 
 /**
  * @swagger
@@ -107,9 +108,11 @@ router.get("/:id",authMiddleware, StudentController.getById.bind(StudentControll
  *             schema:
  *               $ref: '#/components/schemas/Student'
  */
-router.post("/",authMiddleware, StudentController.post.bind(StudentController));
-
-
+router.post(
+  "/",
+  authMiddleware,
+  StudentController.post.bind(StudentController)
+);
 
 /**
  * @swagger
@@ -145,8 +148,11 @@ router.post("/",authMiddleware, StudentController.post.bind(StudentController));
  *       400:
  *         description: 'Error occurred during the update'
  */
-router.put("/:id",authMiddleware, StudentController.put.bind(StudentController));
-
+router.put(
+  "/:id",
+  authMiddleware,
+  StudentController.put.bind(StudentController)
+);
 
 /**
  * @swagger
@@ -172,7 +178,10 @@ router.put("/:id",authMiddleware, StudentController.put.bind(StudentController))
  *       400:
  *         description: 'Error occurred during the deletion'
  */
-router.delete("/:id",authMiddleware, StudentController.remove.bind(StudentController));
-
+router.delete(
+  "/:id",
+  authMiddleware,
+  StudentController.remove.bind(StudentController)
+);
 
 export default router;

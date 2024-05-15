@@ -32,5 +32,5 @@ class PostController extends base_controller_1.default {
     }
 }
 // Export the controllers to be used in routes
-exports.default = new PostController;
+exports.default = new PostController();
 //# sourceMappingURL=post_controller.js.map

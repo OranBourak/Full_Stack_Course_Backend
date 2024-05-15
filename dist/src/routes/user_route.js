@@ -4,84 +4,105 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const router = express_1.default.Router();
-const user_controller_1 = __importDefault(require("../controllers/user_controller"));
+const user_controller_1 = require("../controllers/user_controller");
 const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
-/**
-* @swagger
-* tags:
-*   name: User
-*   description: The User API
-*/
-/**
-* @swagger
-* components:
-*   schemas:
-*     User:
-*       type: object
-*       required:
-*         - email
-*         - password
-*         - image
-*       properties:
-*         email:
-*           type: string
-*           description: The user email
-*         password:
-*           type: string
-*           description: The user password
-*         image:
-*           type: string
-*           description: The user image
-*       example:
-*         email: 'oran@gmail.com'
-*         password: 'oran'
-*         image: oran.jpg
-*/
-/**
-* @swagger
-* /user:
-*   get:
-*     summary: Get all users
-*     tags: [User]
-*     security:
-*       - bearerAuth: []
-*     responses:
-*       200:
-*         description: list of all the users
-*         content:
-*           application/json:
-*             schema:
-*               type: array
-*               items:
-*                  $ref: '#/components/schemas/User'
-*/
-router.get("/", auth_middleware_1.default, user_controller_1.default.get.bind(user_controller_1.default));
+const router = express_1.default.Router();
 /**
  * @swagger
- * /student/{id}:
+ * tags:
+ *   name: User
+ *   description: The User API
+ */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The user's name
+ *         bio:
+ *           type: string
+ *           description: A short bio for the user
+ *         email:
+ *           type: string
+ *           description: The user email, used for login
+ *         password:
+ *           type: string
+ *           description: The user's password, encrypted in storage
+ *         imgUrl:
+ *           type: string
+ *           description: URL to the user's profile image
+ *         tokens:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Authentication tokens associated with the user
+ *         postCount:
+ *           type: integer
+ *           description: Count of posts created by the user
+ *       example:
+ *         name: 'Oran Barak'
+ *         bio: 'Software Engineer and Cybersecurity Specialist'
+ *         email: 'oran@gmail.com'
+ *         password: 'encryptedPassword'
+ *         imgUrl: 'https://example.com/profiles/oran.jpg'
+ *         tokens: ['token1', 'token2']
+ *         postCount: 15
+ */
+/**
+ * @swagger
+ * /user:
  *   get:
- *     summary: 'Get a user by ID'
+ *     summary: Get all users
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+router.get("/", auth_middleware_1.default, user_controller_1.userController.get.bind(user_controller_1.userController));
+/**
+ * @swagger
+ * /user/{email}:
+ *   get:
+ *     summary: 'Get a user by Email'
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: 'path'
- *         name: 'email'
+ *       - in: path
+ *         name: email
  *         required: true
  *         schema:
- *           type: 'string'
+ *           type: string
  *           example: 'oran@gmail.com'
  *         description: 'Unique email of the user to retrieve'
  *     responses:
- *       '200':
- *         description: 'User details'
+ *       200:
+ *         description: 'User details returned successfully'
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: 'User not found'
+ *       500:
+ *         description: 'Internal server error'
  */
-router.get("/:id", auth_middleware_1.default, user_controller_1.default.getById.bind(user_controller_1.default));
+router.get("/email/:email", auth_middleware_1.default, user_controller_1.userController.getByEmail.bind(user_controller_1.userController));
 /**
  * @swagger
  * /user:
@@ -97,19 +118,19 @@ router.get("/:id", auth_middleware_1.default, user_controller_1.default.getById.
  *           schema:
  *             $ref: '#/components/schemas/User'
  *     responses:
- *       '201':
+ *       201:
  *         description: 'User created successfully'
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.post("/", auth_middleware_1.default, user_controller_1.default.post.bind(user_controller_1.default));
+router.post("/", auth_middleware_1.default, user_controller_1.userController.post.bind(user_controller_1.userController));
 /**
  * @swagger
  * /user/{email}:
  *   put:
- *     summary: 'Update a student by Email'
+ *     summary: 'Update a user by Email'
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -139,7 +160,7 @@ router.post("/", auth_middleware_1.default, user_controller_1.default.post.bind(
  *       400:
  *         description: 'Error occurred during the update'
  */
-router.put("/:id", auth_middleware_1.default, user_controller_1.default.put.bind(user_controller_1.default));
+router.put("/:email", auth_middleware_1.default, user_controller_1.userController.updateByEmail.bind(user_controller_1.userController));
 /**
  * @swagger
  * /user/{email}:
@@ -155,7 +176,7 @@ router.put("/:id", auth_middleware_1.default, user_controller_1.default.put.bind
  *         schema:
  *           type: string
  *           example: 'oran@gmail.com'
- *         description: 'Unique ID of the user to delete'
+ *         description: 'Unique email of the user to delete'
  *     responses:
  *       200:
  *         description: 'User deleted successfully'
@@ -164,6 +185,6 @@ router.put("/:id", auth_middleware_1.default, user_controller_1.default.put.bind
  *       400:
  *         description: 'Error occurred during the deletion'
  */
-router.delete("/:id", auth_middleware_1.default, user_controller_1.default.remove.bind(user_controller_1.default));
+router.delete("/:email", auth_middleware_1.default, user_controller_1.userController.remove.bind(user_controller_1.userController));
 exports.default = router;
 //# sourceMappingURL=user_route.js.map

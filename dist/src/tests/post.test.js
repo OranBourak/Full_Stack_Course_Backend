@@ -22,7 +22,7 @@ const testUser = {
     email: "testPost@gmail.com",
     password: "12345678",
     image: "testPost.jpg",
-    accessToken: null
+    accessToken: null,
 };
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     app = yield (0, Server_1.default)();
@@ -39,7 +39,9 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
 }));
 describe("Post test", () => {
     test("Get /post - empty collection", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/post").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/post")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         const data = res.body;
         expect(data).toEqual([]);
@@ -47,16 +49,19 @@ describe("Post test", () => {
     const post = {
         title: "test post title",
         message: "test post message",
-        owner: "Oran"
+        owner: "Oran",
     };
     test("Post /post - empty collection", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).post("/post")
-            .set('Authorization', 'Bearer ' + testUser.accessToken)
+        const res = yield (0, supertest_1.default)(app)
+            .post("/post")
+            .set("Authorization", "Bearer " + testUser.accessToken)
             .send(post);
         expect(res.statusCode).toBe(201);
     }));
     test("Get /post - posted post", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/post").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/post")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         const data = res.body;
         expect(data.length).toBe(1);
@@ -64,37 +69,54 @@ describe("Post test", () => {
         expect(data[0].message).toBe(post.message);
     }));
     test("Get /post:id - get post by ID ", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/post").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/post")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         const data = res.body;
         expect(data.length).toBe(1);
         const ID = data[0]._id;
-        const res2 = yield (0, supertest_1.default)(app).get("/post/" + ID).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res2 = yield (0, supertest_1.default)(app)
+            .get("/post/" + ID)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res2.statusCode).toBe(200);
     }));
     test("Put /post:id - update post by ID ", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/post").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/post")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         const data = res.body;
         const ID = data[0]._id;
         const updatedPost = {
             title: "updated title",
-            message: "updated message"
+            message: "updated message",
         };
-        const res2 = yield (0, supertest_1.default)(app).put("/post/" + ID).set('Authorization', 'Bearer ' + testUser.accessToken).send(updatedPost);
+        const res2 = yield (0, supertest_1.default)(app)
+            .put("/post/" + ID)
+            .set("Authorization", "Bearer " + testUser.accessToken)
+            .send(updatedPost);
         expect(res2.statusCode).toBe(200);
-        const res3 = yield (0, supertest_1.default)(app).get("/post/" + ID).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res3 = yield (0, supertest_1.default)(app)
+            .get("/post/" + ID)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res3.statusCode).toBe(200);
         expect(res3.body.title).toBe(updatedPost.title);
     }));
     test("Delete /post:id - delete post by ID ", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app).get("/post").set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res = yield (0, supertest_1.default)(app)
+            .get("/post")
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res.statusCode).toBe(200);
         const data = res.body;
         const ID = data[0]._id;
-        const res2 = yield (0, supertest_1.default)(app).delete("/post/" + ID).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res2 = yield (0, supertest_1.default)(app)
+            .delete("/post/" + ID)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res2.statusCode).toBe(200);
-        const res3 = yield (0, supertest_1.default)(app).get("/post/" + ID).set('Authorization', 'Bearer ' + testUser.accessToken);
+        const res3 = yield (0, supertest_1.default)(app)
+            .get("/post/" + ID)
+            .set("Authorization", "Bearer " + testUser.accessToken);
         expect(res3.statusCode).toBe(404);
     }));
 });

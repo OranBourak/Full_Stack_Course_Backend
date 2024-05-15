@@ -1,14 +1,13 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import mongoose from "mongoose";
 
-
-class base_controller<ModelType>{
-  itemModel:mongoose.Model<ModelType>;
-  constructor(itemModel:mongoose.Model<ModelType>){
+class base_controller<ModelType> {
+  itemModel: mongoose.Model<ModelType>;
+  constructor(itemModel: mongoose.Model<ModelType>) {
     this.itemModel = itemModel;
   }
   // GET all items or items by email / owner
-  async get(req:Request, res:Response){
+  async get(req: Request, res: Response) {
     console.log("get");
     try {
       // Check if a email query parameter is provided and filter objects by email
@@ -20,27 +19,26 @@ class base_controller<ModelType>{
       else if (req.query.owner) {
         const item = await this.itemModel.find({ owner: req.query.owner });
         res.status(200).send(item);
-      }
-      else {
+      } else {
         // If no name query parameter, return all objects
         const item = await this.itemModel.find();
         res.status(200).send(item);
       }
     } catch (error) {
-        console.log(error);
-        res.status(400).send(error.message);
+      console.log(error);
+      res.status(400).send(error.message);
     }
   }
 
   // GET by ID
-  async getById(req:Request, res:Response){
+  async getById(req: Request, res: Response) {
     console.log(req.params);
     try {
       // Find a student by the ID provided in the URL parameters
       const item = await this.itemModel.findById(req.params.id);
-      if(!item) {
+      if (!item) {
         return res.status(404).send("not found");
-      }else{
+      } else {
         return res.status(200).send(item);
       }
     } catch (error) {
@@ -50,7 +48,7 @@ class base_controller<ModelType>{
   }
 
   // POST a new item
-   async post(req:Request, res:Response){
+  async post(req: Request, res: Response) {
     console.log("post controller");
     try {
       // Create a new object in the database with the provided request body
@@ -63,7 +61,7 @@ class base_controller<ModelType>{
   }
 
   // PUT (update) an item by ID
-   async put(req:Request, res:Response){
+  async put(req: Request, res: Response) {
     const itemId = req.params.id; // Extracting the ID from the URL
     const updateData = req.body; // Assuming the body contains the update data
 
@@ -93,7 +91,7 @@ class base_controller<ModelType>{
   }
 
   // DELETE an item by ID
-   async remove(req:Request, res:Response){
+  async remove(req: Request, res: Response) {
     console.log("item remove controller");
     try {
       // Delete the student document with the specified ID
@@ -104,7 +102,6 @@ class base_controller<ModelType>{
       res.status(400).send(error.message);
     }
   }
-
 }
 // Export the base controller to be used in routes
 export default base_controller;
