@@ -26,8 +26,64 @@ class PostController extends base_controller_1.default {
             post: { get: () => super.post }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            req.body.owner = req.body.user._id;
-            _super.post.call(this, req, res);
+            try {
+                req.body.owner = req.body.user._id;
+                return _super.post.call(this, req, res);
+            }
+            catch (error) {
+                console.log("Error posting:", error);
+                return res.status(500).send("Error posting");
+            }
+        });
+    }
+    likePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const postId = req.params.id; // Get the post ID from URL parameters
+            const userId = req.body.user._id; // Assuming user ID is attached to req.body.user by your auth middleware
+            try {
+                // Check if the user has already liked the post
+                const post = yield post_model_1.default.findById(postId);
+                if (!post) {
+                    return res.status(404).send("Post not found");
+                }
+                if (post.likes.includes(userId)) {
+                    return res.status(400).send("User has already liked this post");
+                }
+                // Add user's ID to the likes array
+                post.likes.push(userId);
+                yield post.save();
+                return res.status(200).send({ message: "Post liked successfully", post });
+            }
+            catch (error) {
+                console.log("Error liking post:", error);
+                return res.status(500).send("Error liking post");
+            }
+        });
+    }
+    unlikePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const postId = req.params.id; // Get the post ID from URL parameters
+            const userId = req.body.user._id; // Assuming user ID is attached to req.body.user by your auth middleware
+            try {
+                // Check if the user has already liked the post
+                const post = yield post_model_1.default.findById(postId);
+                if (!post) {
+                    return res.status(404).send("Post not found");
+                }
+                if (!post.likes.includes(userId)) {
+                    return res.status(400).send("User has not liked this post");
+                }
+                // Remove user's ID from the likes array
+                post.likes = post.likes.filter((id) => id !== userId);
+                yield post.save();
+                return res
+                    .status(200)
+                    .send({ message: "Post unliked successfully", post });
+            }
+            catch (error) {
+                console.log("Error unliking post:", error);
+                return res.status(500).send("Error unliking post");
+            }
         });
     }
 }

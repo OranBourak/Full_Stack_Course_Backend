@@ -17,9 +17,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("auth middleware");
     //get the token from the header
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers["authorization"];
     //split the token from the header and get the second part which is the token itself
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = authHeader && authHeader.split(" ")[1];
     if (token == null) {
         return res.status(401).send("missing token");
     }

@@ -202,4 +202,29 @@ router.delete(
   userController.remove.bind(userController)
 );
 
+router.get(
+  "/myId",
+  authMiddleware,
+  userController.getMyId.bind(userController)
+);
+
+router.put(
+  "follow/:userId",
+  authMiddleware,
+  userController.followUser.bind(userController)
+);
+
+router.put(
+  "unfollow/:userId",
+  authMiddleware,
+  userController.unfollowUser.bind(userController)
+);
+
+router.get("/:id", authMiddleware, userController.getById.bind(userController));
+
+router.get(
+  "/following/",
+  authMiddleware,
+  userController.getFollowing.bind(userController)
+);
 export default router;

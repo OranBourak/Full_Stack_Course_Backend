@@ -166,5 +166,7 @@ router.put("/:id", auth_middleware_1.default, post_controller_1.default.put.bind
  *         description: Error occurred
  */
 router.delete("/:id", auth_middleware_1.default, post_controller_1.default.remove.bind(post_controller_1.default));
+router.put("/like/:id", auth_middleware_1.default, post_controller_1.default.likePost.bind(post_controller_1.default));
+router.put("/unlike/:id", auth_middleware_1.default, post_controller_1.default.unlikePost.bind(post_controller_1.default));
 exports.default = router;
 //# sourceMappingURL=post_route.js.map

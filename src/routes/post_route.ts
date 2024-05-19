@@ -173,4 +173,15 @@ router.delete(
   PostController.remove.bind(PostController)
 );
 
+router.put(
+  "/like/:id",
+  authMiddleware,
+  PostController.likePost.bind(PostController)
+);
+
+router.put(
+  "/unlike/:id",
+  authMiddleware,
+  PostController.unlikePost.bind(PostController)
+);
 export default router;

@@ -186,5 +186,10 @@ router.put("/:email", auth_middleware_1.default, user_controller_1.userControlle
  *         description: 'Error occurred during the deletion'
  */
 router.delete("/:email", auth_middleware_1.default, user_controller_1.userController.remove.bind(user_controller_1.userController));
+router.get("/myId", auth_middleware_1.default, user_controller_1.userController.getMyId.bind(user_controller_1.userController));
+router.put("follow/:userId", auth_middleware_1.default, user_controller_1.userController.followUser.bind(user_controller_1.userController));
+router.put("unfollow/:userId", auth_middleware_1.default, user_controller_1.userController.unfollowUser.bind(user_controller_1.userController));
+router.get("/:id", auth_middleware_1.default, user_controller_1.userController.getById.bind(user_controller_1.userController));
+router.get("/following/", auth_middleware_1.default, user_controller_1.userController.getFollowing.bind(user_controller_1.userController));
 exports.default = router;
 //# sourceMappingURL=user_route.js.map

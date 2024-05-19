@@ -17,9 +17,26 @@ const storage = multer.diskStorage({
   },
 });
 
+const postStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/posts/");
+  },
+  filename: function (req, file, cb) {
+    console.log("multer storage callback");
+    const uniqueSuffix = Date.now() + ".jpg";
+    cb(null, uniqueSuffix);
+  },
+});
+
 const upload = multer({ storage: storage });
+const postUpload = multer({ storage: postStorage });
 
 router.post("/upload", upload.single("file"), function (req, res) {
+  console.log("router.post(/file): " + base + req.file.path);
+  res.status(200).send({ url: base + req.file.path });
+});
+
+router.post("/postUpload", postUpload.single("file"), function (req, res) {
   console.log("router.post(/file): " + base + req.file.path);
   res.status(200).send({ url: base + req.file.path });
 });

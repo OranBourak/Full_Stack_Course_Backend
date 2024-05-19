@@ -16,8 +16,17 @@ const postSchema = new mongoose_1.default.Schema({
     owner: {
         type: String, // Use ObjectId to reference another document
         required: true,
-        ref: 'User' // Reference the User model
+        ref: "User", // Reference the User model
     },
-});
-exports.default = mongoose_1.default.model('Post', postSchema);
+    photo: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    likes: {
+        type: [String],
+        default: [],
+    },
+}, { timestamps: true });
+exports.default = mongoose_1.default.model("Post", postSchema);
 //# sourceMappingURL=post_model.js.map
