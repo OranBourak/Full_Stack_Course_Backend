@@ -54,4 +54,20 @@ router.delete("/remove", function (req, res) {
   }
 });
 
+router.put("/postImageRemove", function (req, res) {
+  console.log("########## postImageRemove ##########");
+  console.log(req.body);
+
+  const filePath = req.body.data.url.replace(base, "");
+  console.log("filePath: " + filePath);
+  try {
+    fs.unlinkSync(filePath); // Synchronous file deletion
+    console.log("The posts' image was deleted");
+    res.status(200).send("Image was deleted");
+  } catch (err) {
+    console.error("Error deleting the image:", err);
+    res.status(500).send("Error deleting the image");
+  }
+});
+
 export default router;

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Import the Post model
 const post_model_1 = __importDefault(require("../models/post_model"));
 const base_controller_1 = __importDefault(require("./base_controller"));
+const user_model_1 = __importDefault(require("../models/user_model"));
 // Create a new PostController that extends the BaseController
 // The BaseController has all the CRUD methods implemented
 class PostController extends base_controller_1.default {
@@ -28,6 +29,9 @@ class PostController extends base_controller_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 req.body.owner = req.body.user._id;
+                yield user_model_1.default.findByIdAndUpdate(req.body.user._id, {
+                    $inc: { postCount: 1 },
+                });
                 return _super.post.call(this, req, res);
             }
             catch (error) {

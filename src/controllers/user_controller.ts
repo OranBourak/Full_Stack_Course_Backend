@@ -78,16 +78,26 @@ class UserController extends BaseController<IUser> {
         return res.status(404).json({ message: "User not found" });
       }
 
+      // Find the user to follow by ID
+      const userToFollow = await this.itemModel.findById(req.params.userId);
+
+      if (!userToFollow) {
+        return res.status(404).json({ message: "User to follow not found" });
+      }
+
       // Check if the user is already being followed
-      if (user.followers.includes(req.params.userId)) {
+      if (user.following.includes(req.params.userId)) {
         return res.status(400).json({ message: "User is already followed" });
       }
 
-      // Add the user ID to the followers array
-      user.followers.push(req.params.userId);
+      // Add the user ID to the following array
+      user.following.push(req.params.userId);
       await user.save();
 
-      return res.json({ message: "User followed successfully", user });
+      userToFollow.followers.push(req.body.user._id);
+      await userToFollow.save();
+
+      return res.status(200).json({ message: "User followed successfully" });
     } catch (error) {
       console.error("Error following user:", error);
       return res.status(500).json({ error: "Internal server error" });
@@ -103,16 +113,31 @@ class UserController extends BaseController<IUser> {
         return res.status(404).json({ message: "User not found" });
       }
 
+      // Find the user to unfollow by ID
+      const userToUnfollow = await this.itemModel.findById(req.params.userId);
+
+      if (!userToUnfollow) {
+        return res.status(404).json({ message: "User to unfollow not found" });
+      }
+
       // Check if the user is not being followed
-      if (!user.followers.includes(req.params.userId)) {
+      if (!user.following.includes(req.params.userId)) {
         return res.status(400).json({ message: "User is not followed" });
       }
 
-      // Remove the user ID from the followers array
-      user.followers = user.followers.filter((id) => id !== req.params.userId);
+      // Remove the user ID from the following array
+      user.following = user.following.filter((id) => id !== req.params.userId);
       await user.save();
 
-      res.json({ message: "User unfollowed successfully", user });
+      // Remove the user ID from the followers array
+      console.log("userToUnfollow:", userToUnfollow);
+      console.log("req.body.user._id:", req.body.user._id);
+      userToUnfollow.followers = userToUnfollow.followers.filter(
+        (id) => id !== req.body.user._id
+      );
+      await userToUnfollow.save();
+
+      res.status(200).json({ message: "User unfollowed successfully" });
     } catch (error) {
       console.error("Error unfollowing user:", error);
       return res.status(500).json({ error: "Internal server error" });

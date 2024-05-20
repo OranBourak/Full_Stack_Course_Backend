@@ -21,7 +21,7 @@ class base_controller<ModelType> {
         return res.status(200).send(item);
       } else {
         // If no name query parameter, return all objects
-        const item = await this.itemModel.find();
+        const item = await this.itemModel.find().sort({ createdAt: -1 });
         return res.status(200).send(item);
       }
     } catch (error) {

@@ -209,13 +209,13 @@ router.get(
 );
 
 router.put(
-  "follow/:userId",
+  "/follow/:userId",
   authMiddleware,
   userController.followUser.bind(userController)
 );
 
 router.put(
-  "unfollow/:userId",
+  "/unfollow/:userId",
   authMiddleware,
   userController.unfollowUser.bind(userController)
 );

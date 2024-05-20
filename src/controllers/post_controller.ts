@@ -3,6 +3,7 @@ import Post from "../models/post_model";
 import BaseController from "./base_controller";
 import { IPost } from "../models/post_model";
 import { Request, Response } from "express";
+import User from "../models/user_model";
 
 // Create a new PostController that extends the BaseController
 // The BaseController has all the CRUD methods implemented
@@ -14,6 +15,9 @@ class PostController extends BaseController<IPost> {
   async post(req: Request, res: Response) {
     try {
       req.body.owner = req.body.user._id;
+      await User.findByIdAndUpdate(req.body.user._id, {
+        $inc: { postCount: 1 },
+      });
       return super.post(req, res);
     } catch (error) {
       console.log("Error posting:", error);

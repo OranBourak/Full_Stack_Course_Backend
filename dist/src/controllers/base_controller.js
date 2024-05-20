@@ -30,7 +30,7 @@ class base_controller {
                 }
                 else {
                     // If no name query parameter, return all objects
-                    const item = yield this.itemModel.find();
+                    const item = yield this.itemModel.find().sort({ createdAt: -1 });
                     return res.status(200).send(item);
                 }
             }
