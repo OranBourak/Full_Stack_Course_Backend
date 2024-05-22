@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 
 import { OAuth2Client } from "google-auth-library";
+import crypto from "crypto";
 const client = new OAuth2Client(
   "259698500105-5v2g2mnfto185u6ebm282a0afeve4en2.apps.googleusercontent.com"
 );
@@ -71,11 +72,9 @@ const generateTokens = (
   );
 
   const refreshToken = jwt.sign(
-    {
-      _id: userId,
-      salt: Math.random(),
-    },
-    process.env.REFRESH_TOKEN_SECRET
+    { _id: userId, salt: crypto.randomBytes(16).toString("hex") },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION }
   );
 
   return {
@@ -151,15 +150,35 @@ const googleLogin = async (req, res) => {
   }
 };
 
-const logout = (req: Request, res: Response) => {
-  res.status(400).send("logout");
-  //TODO: implement logout
+const logout = async (req, res) => {
+  console.log("logout");
+  try {
+    const user = await User.findById(req.body.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const refreshToken = req.body.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({ message: "No access token provided" });
+    }
+
+    user.tokens = user.tokens.filter(
+      (token) => token.trim() == refreshToken.trim()
+    );
+    await user.save();
+    return res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({
+      message: "An error occurred during logout",
+      error: error.message,
+    });
+  }
 };
 
 const refresh = async (req: Request, res: Response) => {
-  //extract token from http header
-  const authHeader = req.headers["authorization"];
-  const refreshTokenOrig = authHeader && authHeader.split(" ")[1];
+  //extract token
+  const refreshTokenOrig = req.body.refreshToken;
 
   if (refreshTokenOrig == null) {
     return res.status(401).send("missing token");

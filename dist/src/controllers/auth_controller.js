@@ -18,6 +18,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const google_auth_library_1 = require("google-auth-library");
+const crypto_1 = __importDefault(require("crypto"));
 const client = new google_auth_library_1.OAuth2Client("259698500105-5v2g2mnfto185u6ebm282a0afeve4en2.apps.googleusercontent.com");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("register function received:" + req.body);
@@ -63,10 +64,7 @@ const generateTokens = (userId) => {
     }, process.env.TOKEN_SECRET, {
         expiresIn: process.env.TOKEN_EXPIRATION,
     });
-    const refreshToken = jsonwebtoken_1.default.sign({
-        _id: userId,
-        salt: Math.random(),
-    }, process.env.REFRESH_TOKEN_SECRET);
+    const refreshToken = jsonwebtoken_1.default.sign({ _id: userId, salt: crypto_1.default.randomBytes(16).toString("hex") }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION });
     return {
         accessToken: accessToken,
         refreshToken: refreshToken,
@@ -129,14 +127,32 @@ const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(400).send("Error processing Google login");
     }
 });
-const logout = (req, res) => {
-    res.status(400).send("logout");
-    //TODO: implement logout
-};
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("logout");
+    try {
+        const user = yield user_model_1.default.findById(req.body.user._id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const refreshToken = req.body.refreshToken;
+        if (!refreshToken) {
+            return res.status(400).json({ message: "No access token provided" });
+        }
+        user.tokens = user.tokens.filter((token) => token.trim() == refreshToken.trim());
+        yield user.save();
+        return res.status(200).json({ message: "User logged out successfully" });
+    }
+    catch (error) {
+        console.error("Logout error:", error);
+        return res.status(500).json({
+            message: "An error occurred during logout",
+            error: error.message,
+        });
+    }
+});
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //extract token from http header
-    const authHeader = req.headers["authorization"];
-    const refreshTokenOrig = authHeader && authHeader.split(" ")[1];
+    //extract token
+    const refreshTokenOrig = req.body.refreshToken;
     if (refreshTokenOrig == null) {
         return res.status(401).send("missing token");
     }

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const auth_controller_1 = __importDefault(require("../controllers/auth_controller"));
+const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
 /**
  * @swagger
  * tags:
@@ -111,7 +112,7 @@ router.post("/login", auth_controller_1.default.login);
  *       200:
  *         description: logout completed successfully
  */
-router.get("/logout", auth_controller_1.default.logout);
+router.post("/logout", auth_middleware_1.default, auth_controller_1.default.logout);
 /**
  * @swagger
  * /auth/refresh:
@@ -129,8 +130,7 @@ router.get("/logout", auth_controller_1.default.logout);
  *             schema:
  *               $ref: '#/components/schemas/Tokens'
  */
-router.get("/refresh", auth_controller_1.default.refresh);
-//TODO: add swagger documentation
+router.post("/refresh", auth_controller_1.default.refresh);
 router.post("/googleLogin", auth_controller_1.default.googleLogin);
 exports.default = router;
 //# sourceMappingURL=auth_route.js.map

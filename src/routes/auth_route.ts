@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import authController from "../controllers/auth_controller";
+import authMiddleware from "../common/auth_middleware";
 
 /**
  * @swagger
@@ -112,7 +113,7 @@ router.post("/login", authController.login);
  *       200:
  *         description: logout completed successfully
  */
-router.get("/logout", authController.logout);
+router.post("/logout", authMiddleware, authController.logout);
 
 /**
  * @swagger
@@ -131,9 +132,8 @@ router.get("/logout", authController.logout);
  *             schema:
  *               $ref: '#/components/schemas/Tokens'
  */
-router.get("/refresh", authController.refresh);
+router.post("/refresh", authController.refresh);
 
-//TODO: add swagger documentation
 router.post("/googleLogin", authController.googleLogin);
 
 export default router;
