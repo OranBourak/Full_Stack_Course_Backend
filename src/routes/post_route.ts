@@ -173,12 +173,60 @@ router.delete(
   PostController.remove.bind(PostController)
 );
 
+/**
+ * @swagger
+ * /post/like/{id}:
+ *   put:
+ *     summary: Like a post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 'abc123'
+ *         description: Unique ID of the post to like
+ *     responses:
+ *       200:
+ *         description: Post liked successfully
+ *       404:
+ *         description: Post not found
+ *       400:
+ *         description: user has already liked this post
+ */
 router.put(
   "/like/:id",
   authMiddleware,
   PostController.likePost.bind(PostController)
 );
 
+/**
+ * @swagger
+ * /post/unlike/{id}:
+ *   put:
+ *     summary: Unlike a post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 'abc123'
+ *         description: Unique ID of the post to unlike
+ *     responses:
+ *       200:
+ *         description: Post unliked successfully
+ *       404:
+ *         description: Post not found
+ *       400:
+ *         description: User has not liked this post
+ */
 router.put(
   "/unlike/:id",
   authMiddleware,

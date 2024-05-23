@@ -59,6 +59,43 @@ const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
  */
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     GoogleLoginRequest:
+ *       type: object
+ *       required:
+ *         - id_token
+ *       properties:
+ *         id_token:
+ *           type: string
+ *           description: The ID token from Google's OAuth2.0
+ *       example:
+ *         id_token: 'your-google-id-token'
+ */
+/**
+ * @swagger
+ * /auth/googleLogin:
+ *   post:
+ *     summary: Login or register a user using Google authentication
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GoogleLoginRequest'
+ *     responses:
+ *       200:
+ *         description: The access & refresh tokens
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tokens'
+ *       400:
+ *         description: Error processing Google login
+ */
+/**
+ * @swagger
  * /auth/register:
  *   post:
  *     summary: registers a new user
@@ -131,6 +168,28 @@ router.post("/logout", auth_middleware_1.default, auth_controller_1.default.logo
  *               $ref: '#/components/schemas/Tokens'
  */
 router.post("/refresh", auth_controller_1.default.refresh);
+/**
+ * @swagger
+ * /auth/googleLogin:
+ *   post:
+ *     summary: Login or register a user using Google authentication
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GoogleLoginRequest'
+ *     responses:
+ *       200:
+ *         description: The access & refresh tokens
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tokens'
+ *       400:
+ *         description: Error processing Google login
+ */
 router.post("/googleLogin", auth_controller_1.default.googleLogin);
 exports.default = router;
 //# sourceMappingURL=auth_route.js.map

@@ -197,13 +197,12 @@ const refresh = async (req: Request, res: Response) => {
         const user = await User.findById(userInfo._id);
         if (
           user == null ||
-          user.tokens == null ||
+          user.tokens.length === 0 ||
           !user.tokens.includes(refreshTokenOrig)
         ) {
-          if (user.tokens != null) {
-            user.tokens = [];
-            await user.save();
-          }
+          user.tokens = [];
+          await user.save();
+
           return res.status(403).send("invalid token");
         }
 

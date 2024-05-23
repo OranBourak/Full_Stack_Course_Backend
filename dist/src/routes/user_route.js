@@ -105,6 +105,76 @@ router.get("/", auth_middleware_1.default, user_controller_1.userController.get.
 router.get("/email/:email", auth_middleware_1.default, user_controller_1.userController.getByEmail.bind(user_controller_1.userController));
 /**
  * @swagger
+ * /user/myId:
+ *   get:
+ *     summary: Get the logged-in user's ID
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User ID returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: The ID of the logged-in user
+ *                   example: '12345'
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/myId", auth_middleware_1.default, user_controller_1.userController.getMyId.bind(user_controller_1.userController));
+router.get("/:id", auth_middleware_1.default, user_controller_1.userController.getById.bind(user_controller_1.userController));
+/**
+ * @swagger
+ * /user/following:
+ *   get:
+ *     summary: Retrieve list of users the logged-in user is following
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of followed users returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/following/", auth_middleware_1.default, user_controller_1.userController.getFollowing.bind(user_controller_1.userController));
+/**
+ * @swagger
+ * /user/googleUserExisting:
+ *   post:
+ *     summary: Handle Google user login or registration
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Google user's email
+ *                 example: 'example@gmail.com'
+ *     responses:
+ *       200:
+ *         description: Google user processed successfully
+ *       201:
+ *         description: Google user do not exists
+ */
+router.post("/googleUserExisting", user_controller_1.userController.googleUserExisting.bind(user_controller_1.userController));
+/**
+ * @swagger
  * /user:
  *   post:
  *     summary: 'Create a new user'
@@ -163,6 +233,56 @@ router.post("/", auth_middleware_1.default, user_controller_1.userController.pos
 router.put("/:email", auth_middleware_1.default, user_controller_1.userController.updateByEmail.bind(user_controller_1.userController));
 /**
  * @swagger
+ * /user/follow/{userId}:
+ *   put:
+ *     summary: Follow another user
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '12345'
+ *         description: Unique ID of the user to follow
+ *     responses:
+ *       200:
+ *         description: User followed successfully
+ *       404:
+ *         description: User not found
+ *       401:
+ *         description: Unauthorized
+ */
+router.put("/follow/:userId", auth_middleware_1.default, user_controller_1.userController.followUser.bind(user_controller_1.userController));
+/**
+ * @swagger
+ * /user/unfollow/{userId}:
+ *   put:
+ *     summary: Unfollow another user
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '12345'
+ *         description: Unique ID of the user to unfollow
+ *     responses:
+ *       200:
+ *         description: User unfollowed successfully
+ *       404:
+ *         description: User not found
+ *       401:
+ *         description: Unauthorized
+ */
+router.put("/unfollow/:userId", auth_middleware_1.default, user_controller_1.userController.unfollowUser.bind(user_controller_1.userController));
+/**
+ * @swagger
  * /user/{email}:
  *   delete:
  *     summary: 'Delete a user by Email'
@@ -186,10 +306,5 @@ router.put("/:email", auth_middleware_1.default, user_controller_1.userControlle
  *         description: 'Error occurred during the deletion'
  */
 router.delete("/:email", auth_middleware_1.default, user_controller_1.userController.remove.bind(user_controller_1.userController));
-router.get("/myId", auth_middleware_1.default, user_controller_1.userController.getMyId.bind(user_controller_1.userController));
-router.put("/follow/:userId", auth_middleware_1.default, user_controller_1.userController.followUser.bind(user_controller_1.userController));
-router.put("/unfollow/:userId", auth_middleware_1.default, user_controller_1.userController.unfollowUser.bind(user_controller_1.userController));
-router.get("/:id", auth_middleware_1.default, user_controller_1.userController.getById.bind(user_controller_1.userController));
-router.get("/following/", auth_middleware_1.default, user_controller_1.userController.getFollowing.bind(user_controller_1.userController));
 exports.default = router;
 //# sourceMappingURL=user_route.js.map

@@ -164,6 +164,25 @@ class UserController extends base_controller_1.default {
             }
         });
     }
+    googleUserExisting(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Checking if Google user exists:", req.body.email);
+            try {
+                // Find the user by email
+                const user = yield this.itemModel.findOne({ email: req.body.email });
+                if (user) {
+                    return res.status(200).json({ message: "User exists", user });
+                }
+                else {
+                    return res.status(201).json({ message: "User does not exist" });
+                }
+            }
+            catch (error) {
+                console.error("Error checking if Google user exists:", error);
+                return res.status(500).json({ error: "Internal server error" });
+            }
+        });
+    }
 }
 exports.userController = new UserController();
 //# sourceMappingURL=user_controller.js.map

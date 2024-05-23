@@ -29,6 +29,31 @@ describe("File Tests", () => {
           .attach("file", filePath); // Attach the file to the request
 
         expect(response.statusCode).toBe(200);
+
+        // Cleanup
+        const response2 = await request(app)
+          .delete("/file/remove")
+          .send({ url: response.body.url });
+
+        expect(response2.statusCode).toBe(200);
+      } catch (error) {
+        console.error("File does not exist or server error occurred", error);
+      }
+    }
+  }, 10000); // Increased timeout to 10000 milliseconds
+
+  test("upload post image", async () => {
+    const filePath = `${__dirname}/Avatar.png`;
+    const rs = await fs.exists(filePath);
+
+    if (rs) {
+      console.log("File exists");
+      try {
+        const response = await request(app)
+          .post("/file/postUpload")
+          .attach("file", filePath); // Attach the file to the request
+
+        expect(response.statusCode).toBe(200);
       } catch (error) {
         console.error("File does not exist or server error occurred", error);
       }

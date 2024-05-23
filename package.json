@@ -12,6 +12,7 @@
     "testPost": "shx cp .env_test .env && jest --detectOpenHandles --forceExit --coverage ./src/tests/post.test.ts",
     "testItem": "shx cp .env_test .env && jest --detectOpenHandles --forceExit --coverage ./src/tests/item.test.ts",
     "testFile": "shx cp .env_test .env && jest --detectOpenHandles --forceExit --coverage ./src/tests/file.test.ts",
+    "testUser": "shx cp .env_test .env && jest --detectOpenHandles --forceExit --coverage ./src/tests/user.test.ts",
     "lint": "eslint . --ext .ts"
   },
   "author": "Oran Bourak",

@@ -154,9 +154,25 @@ class UserController extends BaseController<IUser> {
       }
 
       // Fetch only the followers array
-      res.json({ following: user.following });
+      return res.status(200).json({ following: user.following });
     } catch (error) {
       console.error("Error fetching followers:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async googleUserExisting(req: Request, res: Response) {
+    console.log("Checking if Google user exists:", req.body.email);
+    try {
+      // Find the user by email
+      const user = await this.itemModel.findOne({ email: req.body.email });
+      if (user) {
+        return res.status(200).json({ message: "User exists", user });
+      } else {
+        return res.status(201).json({ message: "User does not exist" });
+      }
+    } catch (error) {
+      console.error("Error checking if Google user exists:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   }

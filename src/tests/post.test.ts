@@ -10,8 +10,9 @@ let app: Express;
 const testUser = {
   email: "testPost@gmail.com",
   password: "12345678",
-  image: "testPost.jpg",
+  imgUrl: "testPost.jpg",
   accessToken: null,
+  id: null,
 };
 
 beforeAll(async () => {
@@ -116,5 +117,13 @@ describe("Post test", () => {
       .get("/post/" + ID)
       .set("Authorization", "Bearer " + testUser.accessToken);
     expect(res3.statusCode).toBe(404);
+  });
+
+  test("Get /myId", async () => {
+    const res = await request(app)
+      .get("/post")
+      .set("Authorization", "Bearer " + testUser.accessToken);
+    expect(res.statusCode).toBe(200);
+    console.log(res.body);
   });
 });

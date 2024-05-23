@@ -166,7 +166,55 @@ router.put("/:id", auth_middleware_1.default, post_controller_1.default.put.bind
  *         description: Error occurred
  */
 router.delete("/:id", auth_middleware_1.default, post_controller_1.default.remove.bind(post_controller_1.default));
+/**
+ * @swagger
+ * /post/like/{id}:
+ *   put:
+ *     summary: Like a post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 'abc123'
+ *         description: Unique ID of the post to like
+ *     responses:
+ *       200:
+ *         description: Post liked successfully
+ *       404:
+ *         description: Post not found
+ *       400:
+ *         description: user has already liked this post
+ */
 router.put("/like/:id", auth_middleware_1.default, post_controller_1.default.likePost.bind(post_controller_1.default));
+/**
+ * @swagger
+ * /post/unlike/{id}:
+ *   put:
+ *     summary: Unlike a post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 'abc123'
+ *         description: Unique ID of the post to unlike
+ *     responses:
+ *       200:
+ *         description: Post unliked successfully
+ *       404:
+ *         description: Post not found
+ *       400:
+ *         description: User has not liked this post
+ */
 router.put("/unlike/:id", auth_middleware_1.default, post_controller_1.default.unlikePost.bind(post_controller_1.default));
 exports.default = router;
 //# sourceMappingURL=post_route.js.map
